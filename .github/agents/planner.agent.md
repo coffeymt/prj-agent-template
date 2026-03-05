@@ -2,7 +2,7 @@
 name: Planner
 description: 'Creates comprehensive implementation plans by researching the codebase, consulting documentation, and identifying edge cases.'
 model: Gemini 3.1 Pro (Preview) (copilot)
-tools: [vscode, execute, read, agent, edit, search, web, 'io.github.upstash/context7/*', memory, todo]
+tools: [vscode, execute, read, agent, edit, search, web, 'io.github.upstash/context7/*', vscode/memory, todo]
 ---
 
 # Planning Agent
