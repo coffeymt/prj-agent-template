@@ -18,6 +18,25 @@ These are the agents you can call. Each has a specific role:
 - **Reviewer** — Static code review: analyzes files for correctness, security, contract violations, and pattern consistency. Never writes code.
 - **Auditor** — Infrastructure verification: runs read-only commands to verify resources exist and are correctly configured. Never creates or modifies resources.
 
+## Skills
+
+These skill files in `.github/skills/` define project standards. Reference the relevant ones when delegating to ensure agents follow established conventions:
+
+- `sql-development.md` — SQL authoring standards, referencing patterns, incremental logic, and dynamic SQL conventions
+- `entity-resolution.md` — Deterministic entity matching, ID generation, and conflict resolution
+- `pipeline-orchestration.md` — Multi-step pipeline patterns, event-driven orchestration, and workflow conventions
+- `database-optimization.md` — Partitioning, indexing, query performance, and cost management
+- `context-loader.md` — Schema and metadata discovery for context-aware code generation
+- `api-contract-validation.md` — Interface contracts between orchestration layers and execution engines
+
+## Universal Anti-Patterns
+
+Enforce these rules across all delegations. Flag violations during review:
+
+- **Do NOT** hardcode project IDs, dataset names, connection strings, or environment-specific values in source code. Use configuration, environment variables, or framework references.
+- **Do NOT** hardcode secrets, credentials, or API keys anywhere. Use a secrets manager.
+- **Do NOT** modify core identity or key generation logic without explicit instruction and full downstream impact analysis.
+
 ## Execution Model
 
 You MUST follow this structured execution pattern:
@@ -31,6 +50,8 @@ If the plan involves infrastructure, platform services, databases, or API integr
 > "Given this plan: [summary of Planner output], determine the platform architecture. Select which APIs, services, databases, service accounts, and IAM roles are needed. Produce an infrastructure blueprint."
 
 The Architect's output feeds into both the Coder (for implementation) and the Auditor (for verification).
+
+**Pre-change verification:** Before suggesting any schema or infrastructure change, instruct the Architect to verify the current state of the target resource first (e.g., `bq show`, `gcloud describe`, `psql \d`, etc.).
 
 ### Step 2: Branch Decision
 Before any code is written, determine whether the work requires a **feature branch**:
@@ -71,6 +92,16 @@ For each phase:
 2. **Spawn multiple subagents simultaneously** — Call agents in parallel when possible
 3. **Wait for all tasks in phase to complete** before starting next phase
 4. **Report progress** — After each phase, summarize what was completed
+
+#### Delegation Requirements
+
+Every delegation prompt to an implementing agent (Coder, Designer, Architect) **MUST** include these requirements. This ensures project standards propagate through the agent chain:
+
+1. **Skill file references** — Identify which `.github/skills/` files are relevant to the task and name them in the delegation prompt. Example: *"Reference `.github/skills/sql-development.md` for SQL authoring standards."*
+2. **Build verification** — Every Coder delegation must end with: *"After implementation, run the project's build/compile command (e.g., `dataform compile`) to verify correctness. Fix any failures before reporting completion."*
+3. **Anti-pattern guardrails** — Include: *"Do NOT hardcode project IDs, dataset names, connection strings, or environment-specific values. Use configuration or framework references."*
+4. **Pre-change verification** — For schema or infrastructure changes, include: *"Verify the current state of the target resource before modifying it."*
+5. **Pattern adherence** — Include: *"Follow existing patterns in the codebase. Read target files fully before editing."*
 
 ### Step 5: Code Review
 After all implementation phases complete, call the Reviewer agent:

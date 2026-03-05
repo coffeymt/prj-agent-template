@@ -1,7 +1,7 @@
 ---
 name: Coder
 description: 'Writes production-quality code across languages and frameworks, following project conventions and best practices.'
-model: Claude Sonnet 4.5 (copilot)
+model: GPT-5.3-Codex (copilot)
 tools: [vscode, execute, read, agent, edit, search, web, 'io.github.upstash/context7/*', memory, github.vscode-pull-request-github/issue_fetch, github.vscode-pull-request-github/suggest-fix, github.vscode-pull-request-github/searchSyntax, github.vscode-pull-request-github/doSearch, github.vscode-pull-request-github/renderIssues, github.vscode-pull-request-github/activePullRequest, github.vscode-pull-request-github/openPullRequest, todo]
 ---
 
