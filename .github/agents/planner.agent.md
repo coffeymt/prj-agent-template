@@ -2,7 +2,7 @@
 name: Planner
 description: 'Creates comprehensive implementation plans by researching the codebase, consulting documentation, and identifying edge cases.'
 model: Gemini 3.1 Pro (Preview) (copilot)
-tools: [vscode, execute, read, agent, edit, search, web, 'io.github.upstash/context7/*', vscode/memory, todo]
+tools: [read, search, edit, web, 'io.github.upstash/context7/*']
 ---
 
 # Planning Agent
@@ -57,6 +57,15 @@ Decompose the PRD into a **dependency-aware task graph** that Coder, Designer, a
    - Dependencies (which tasks must complete first)
    - Assigned agent (Coder, Designer, or Architect)
 
+## Phase 4: Persist Plan
+
+After generating the PRD and dependency-aware task graph, persist both outputs at the repository root:
+
+1. Derive `{task_name}` as a kebab-case slug from the feature name (for example, `Add Auth Module` -> `add-auth-module`).
+2. Create directory `plan/{task_name}/`.
+3. Write `plan/{task_name}/prd.md` containing the PRD from Phase 1.
+4. Write `plan/{task_name}/tasks.md` containing the task graph from Phase 3 in GitHub-flavored markdown checkbox format.
+
 ## Output Format
 
 - **Summary** — What, why, scope (one paragraph)
@@ -64,20 +73,17 @@ Decompose the PRD into a **dependency-aware task graph** that Coder, Designer, a
 - **Task Graph** — Ordered phases of concrete tasks:
   ```
   ### Phase 0: Foundation (no dependencies)
-  - Task 0.1: [description] → Coder
-    Files: [target files]
-    Depends on: none
-    Acceptance: [how we know it's done]
+  - [ ] **Task 0.1** — [description] → Coder | Files: [target files]
+    - Depends on: none
+    - Acceptance: [how we know it's done]
 
   ### Phase 1: [Name] (depends on Phase 0)
-  - Task 1.1: [description] → Coder
-    Files: [target files]
-    Depends on: [Task 0.1, Task 0.2]
-    Acceptance: [criteria]
-  - Task 1.2: [description] → Designer (parallel with 1.1)
-    Files: [target files]
-    Depends on: [Task 0.1]
-    Acceptance: [criteria]
+  - [ ] **Task 1.1** — [description] → Coder | Files: [target files]
+    - Depends on: [Task 0.1, Task 0.2]
+    - Acceptance: [criteria]
+  - [ ] **Task 1.2** — [description] → Designer (parallel with 1.1) | Files: [target files]
+    - Depends on: [Task 0.1]
+    - Acceptance: [criteria]
   ```
 - **Infrastructure Requirements** (if applicable) — Resources to create/configure:
   - APIs, storage, databases, messaging, compute, networking, IAM
@@ -85,6 +91,10 @@ Decompose the PRD into a **dependency-aware task graph** that Coder, Designer, a
 - **Quality Assurance** — Tests and assertions to add/update, edge cases to cover
 - **Performance Considerations** — Optimization strategies relevant to the stack
 - **Open Questions** — Uncertainties or decisions needed
+
+Task lifecycle note:
+- Implementation agents mark completed tasks by changing `- [ ]` to `- [x]` in `tasks.md`.
+- The Orchestrator tracks progress by reading unchecked items in `tasks.md`.
 
 ## Rules
 
@@ -94,3 +104,4 @@ Decompose the PRD into a **dependency-aware task graph** that Coder, Designer, a
 - Every plan that involves service accounts or IAM MUST include a security/access review
 - Plans should identify which work can be parallelized vs. must be sequential
 - Surface uncertainties — don't hide them
+- Follow plan directory structure and task formatting conventions from `.github/skills/plan-management.md`

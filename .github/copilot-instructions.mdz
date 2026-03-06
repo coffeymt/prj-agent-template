@@ -18,6 +18,7 @@ This project uses specialized agents for different roles. Use the Orchestrator f
 - **Planner** — Creates implementation plans and task decomposition
 - **Architect** — Designs platform/infrastructure architecture; selects APIs, services, databases, and IAM roles
 - **Coder** — Writes production code across languages and frameworks
+- **Documenter** — Digests completed work and updates project documentation in `assets/`
 - **Designer** — UI/UX design, documentation layout, system visualization
 - **Reviewer** — Static code review for correctness, security, and pattern consistency
 - **Auditor** — Read-only infrastructure verification
@@ -32,6 +33,8 @@ Refer to these guides in `.github/skills/` for in-depth patterns and standards:
 - `database-optimization.md` — Partitioning, indexing, query performance, and cost management
 - `context-loader.md` — Schema and metadata discovery for context-aware code generation
 - `api-contract-validation.md` — Interface contracts between orchestration layers and execution engines
+- `plan-management.md` — Plan directory structure, task graph format, and checkpoint tracking conventions
+- `documentation-standards.md` — Writing standards for project documentation: conciseness, structure, and update rules
 
 ## Universal Anti-Patterns
 
