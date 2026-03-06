@@ -16,6 +16,7 @@ This project uses specialized agents for different roles. Use the Orchestrator f
 
 - **Orchestrator** — Decomposes complex requests and delegates to specialist agents
 - **Planner** — Creates implementation plans and task decomposition
+- **Researcher** — Investigates codebases, libraries, APIs, and technical questions; produces structured findings
 - **Architect** — Designs platform/infrastructure architecture; selects APIs, services, databases, and IAM roles
 - **Coder** — Writes production code across languages and frameworks
 - **Documenter** — Digests completed work and updates project documentation in `assets/`
